@@ -1,0 +1,50 @@
+.restaurant {
+  padding: 20px;
+  text-align: center;
+}
+
+.restaurant h2 {
+  margin-bottom: 20px;
+}
+
+.food-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.food-card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  transition: 0.3s;
+  background: #fff;
+}
+
+.food-card:hover {
+  transform: scale(1.05);
+}
+
+.food-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.food-card h3 {
+  margin: 10px 0;
+}
+
+.food-card button {
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.food-card button:hover {
+  background: #e60000;
+}

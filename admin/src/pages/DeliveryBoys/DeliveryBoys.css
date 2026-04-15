@@ -1,0 +1,52 @@
+.db-page { padding: 24px 30px; max-width: 900px; }
+.db-page h2 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+.db-desc { font-size: 13px; color: #6b7280; margin-bottom: 24px; line-height: 1.5; max-width: 600px; }
+
+.db-form {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    background: #f9fafb; border: 1px solid #e5e7eb;
+    border-radius: 12px; padding: 18px; margin-bottom: 28px;
+}
+.db-form input, .db-form select {
+    flex: 1; min-width: 160px; padding: 10px 14px;
+    border: 1.5px solid #e5e7eb; border-radius: 8px; font-size: 14px; outline: none;
+}
+.db-form input:focus { border-color: tomato; }
+.db-form button {
+    background: tomato; color: #fff; border: none;
+    padding: 10px 24px; border-radius: 8px; font-size: 14px;
+    font-weight: 600; cursor: pointer;
+}
+.db-form button:hover { background: #e5533d; }
+.db-form button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.db-empty { color: #9ca3af; font-size: 14px; margin-top: 20px; }
+
+.db-table { display: flex; flex-direction: column; gap: 0; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; }
+
+.db-thead {
+    display: grid; grid-template-columns: 1.5fr 1.2fr 0.8fr 1.2fr 1fr 0.8fr;
+    background: #f3f4f6; padding: 12px 16px;
+    font-size: 12px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;
+}
+.db-row {
+    display: grid; grid-template-columns: 1.5fr 1.2fr 0.8fr 1.2fr 1fr 0.8fr;
+    padding: 14px 16px; font-size: 14px; color: #374151;
+    border-top: 1px solid #f3f4f6; align-items: center;
+}
+.db-row:hover { background: #fafafa; }
+.db-name { font-weight: 600; color: #111827; }
+.db-order { font-family: monospace; font-size: 12px; color: #9ca3af; }
+
+.db-avail-btn {
+    border: none; padding: 5px 12px; border-radius: 20px;
+    font-size: 12px; font-weight: 600; cursor: pointer;
+}
+.db-avail-btn.available { background: #f0fdf4; color: #16a34a; }
+.db-avail-btn.busy      { background: #fef2f2; color: #dc2626; }
+
+.db-delete-btn {
+    background: none; border: 1px solid #fecaca; color: #dc2626;
+    padding: 5px 12px; border-radius: 6px; font-size: 12px; cursor: pointer;
+}
+.db-delete-btn:hover { background: #fef2f2; }

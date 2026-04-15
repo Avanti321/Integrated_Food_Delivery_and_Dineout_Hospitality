@@ -1,0 +1,49 @@
+.booktable-page { min-height: 100vh; background: #f9fafb; padding: 40px 20px 60px; display: flex; justify-content: center; }
+.booktable-container { width: 100%; max-width: 660px; background: #fff; border-radius: 20px; box-shadow: 0 6px 30px rgba(0,0,0,0.08); overflow: hidden; }
+.booktable-header { background: tomato; padding: 26px 32px 22px; color: #fff; }
+.booktable-header h2 { font-size: 26px; font-weight: 700; margin: 0 0 6px; }
+.booktable-header p  { font-size: 14px; opacity: 0.9; margin: 0; }
+.booktable-form { padding: 26px 32px 32px; display: flex; flex-direction: column; gap: 14px; }
+.bt-section { font-size: 12px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 6px; margin-bottom: -2px; }
+.bt-select { width: 100%; padding: 11px 14px; border: 1.5px solid #e5e7eb; border-radius: 10px; font-size: 14px; outline: none; background: #fafafa; cursor: pointer; }
+.bt-select:focus { border-color: tomato; }
+.bt-select-list { height: 140px; padding: 4px 0; }
+.bt-select-list option { padding: 8px 14px; cursor: pointer; }
+.bt-select-list option:checked { background: tomato; color: #fff; }
+.bt-selected { display: flex; align-items: flex-start; gap: 10px; background: #f0fdf4; border: 1px solid #86efac; border-radius: 10px; padding: 12px 16px; }
+.bt-selected-tick { font-size: 18px; }
+.bt-selected strong { font-size: 14px; font-weight: 700; color: #15803d; }
+.bt-selected p { font-size: 12px; color: #6b7280; margin: 2px 0 0; }
+
+/* Menu preview */
+.bt-menu-section { background: #f9fafb; border: 1px solid #f3f4f6; border-radius: 12px; padding: 16px; }
+.bt-menu-loading, .bt-menu-empty { font-size: 13px; color: #9ca3af; text-align: center; padding: 12px 0; }
+.bt-menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-top: 10px; }
+.bt-menu-card { background: #fff; border-radius: 10px; border: 1px solid #e5e7eb; overflow: hidden; }
+.bt-menu-card img { width: 100%; height: 80px; object-fit: cover; display: block; }
+.bt-menu-info { padding: 8px 10px; }
+.bt-menu-cat  { font-size: 10px; font-weight: 700; text-transform: uppercase; color: tomato; letter-spacing: 0.5px; }
+.bt-menu-name { font-size: 13px; font-weight: 600; color: #111827; margin: 2px 0; }
+.bt-menu-price{ font-size: 13px; font-weight: 700; color: #374151; }
+
+.bt-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.bt-field { display: flex; flex-direction: column; gap: 5px; }
+.bt-field label { font-size: 13px; font-weight: 600; color: #374151; }
+.bt-opt { font-weight: 400; color: #9ca3af; font-size: 12px; }
+.booktable-form input, .booktable-form textarea {
+    width: 100%; box-sizing: border-box; padding: 11px 14px;
+    border: 1.5px solid #e5e7eb; border-radius: 10px; font-size: 14px;
+    color: #111827; background: #fafafa; outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.booktable-form input:focus, .booktable-form textarea:focus {
+    border-color: tomato; background: #fff; box-shadow: 0 0 0 3px rgba(255,99,71,0.12);
+}
+.booktable-form textarea { resize: vertical; min-height: 80px; }
+.bt-btn { width: 100%; padding: 14px; background: tomato; color: #fff; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-top: 4px; }
+.bt-btn:hover { background: #e5533d; }
+@media (max-width: 580px) {
+    .bt-row { grid-template-columns: 1fr; }
+    .booktable-form { padding: 18px 16px 26px; }
+    .booktable-header { padding: 20px 16px 16px; }
+}
