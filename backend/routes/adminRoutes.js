@@ -2,13 +2,16 @@ import express from "express";
 import Order from "../models/orderModel.js";
 import User from "../models/userModel.js";
 import Booking from "../models/bookingModel.js";
+import { protect, adminOnly } from "../middleware/auth.js"; // ✅ Import auth middleware
 
 const router = express.Router();
 
-router.get("/stats", async (req, res) => {
+// ✅ protect → verifies JWT token
+// ✅ adminOnly → checks isAdmin flag, blocks non-admins with 403
+router.get("/stats", protect, adminOnly, async (req, res) => {
   try {
-    const totalOrders = await Order.countDocuments();
-    const totalUsers = await User.countDocuments();
+    const totalOrders   = await Order.countDocuments();
+    const totalUsers    = await User.countDocuments();
     const totalBookings = await Booking.countDocuments();
 
     const revenue = await Order.aggregate([
@@ -16,6 +19,7 @@ router.get("/stats", async (req, res) => {
     ]);
 
     res.json({
+      success: true,
       totalOrders,
       totalUsers,
       totalBookings,
@@ -23,7 +27,7 @@ router.get("/stats", async (req, res) => {
     });
 
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ success: false, message: err.message });
   }
 });
 

@@ -1,13 +1,39 @@
-.navbar{
+.navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 8px 4%;
 }
+
 .navbar .logo {
-    width: max(10%,80px);
+    width: max(10%, 80px);
 }
 
-.navbar .profile{
+/* ✅ NEW — wraps profile image + logout button on the right */
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.navbar .profile {
     width: 40px;
+    border-radius: 50%;
+}
+
+/* ✅ NEW — Logout button */
+.logout-btn {
+    padding: 8px 18px;
+    background: #f97316;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.logout-btn:hover {
+    background: #ea6c0a;
 }

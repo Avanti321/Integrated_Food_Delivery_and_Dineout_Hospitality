@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState } from "react";
 import { StoreContext } from "../../context/StoreContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -34,12 +34,16 @@ const RESTAURANTS = [
     { id: 24, city: "Hyderabad", name: "Shah Ghouse Cafe",      address: "Tolichowki, Hyderabad" },
 ];
 
+// ✅ Booking time window: 10:00 AM to 11:00 PM
+const MIN_TIME = "10:00"; // 10:00 AM
+const MAX_TIME = "23:00"; // 11:00 PM
+
 const BookTable = () => {
     const { url, token } = useContext(StoreContext);
     const navigate = useNavigate();
 
     const [selectedCity,       setSelectedCity]       = useState("");
-    const [selectedRestaurant, setSelectedRestaurant] = useState(null); // full object
+    const [selectedRestaurant, setSelectedRestaurant] = useState(null);
     const [restaurantMenus,    setRestaurantMenus]    = useState([]);
     const [loadingMenus,       setLoadingMenus]       = useState(false);
 
@@ -54,7 +58,6 @@ const BookTable = () => {
         ? RESTAURANTS.filter(r => r.city === selectedCity)
         : RESTAURANTS;
 
-    // ✅ Fetch menus for selected restaurant from backend
     const fetchRestaurantMenus = async (restaurantName) => {
         setLoadingMenus(true);
         try {
@@ -78,8 +81,37 @@ const BookTable = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!token) { toast.error("Please login to book a table"); return; }
-        if (!selectedRestaurant) { toast.error("Please select a restaurant"); return; }
+
+        // ✅ CHECK 1: Must be logged in
+        if (!token) {
+            toast.error("Please login first to book a table!", {
+                duration: 3000,
+                icon: "🔒",
+            });
+            return;
+        }
+
+        // ✅ CHECK 2: Must select a restaurant
+        if (!selectedRestaurant) {
+            toast.error("Please select a restaurant");
+            return;
+        }
+
+        // ✅ CHECK 3: Time must be between 10:00 AM and 11:00 PM
+        if (formData.time) {
+            const [hours, minutes] = formData.time.split(":").map(Number);
+            const totalMinutes = hours * 60 + minutes;
+            const minMinutes = 10 * 60;       // 10:00 AM = 600 mins
+            const maxMinutes = 23 * 60;       // 11:00 PM = 1380 mins
+
+            if (totalMinutes < minMinutes || totalMinutes > maxMinutes) {
+                toast.error("Booking time must be between 10:00 AM and 11:00 PM", {
+                    duration: 4000,
+                    icon: "⏰",
+                });
+                return;
+            }
+        }
 
         try {
             const { data } = await axios.post(
@@ -107,6 +139,13 @@ const BookTable = () => {
                 </div>
 
                 <div className="booktable-form">
+
+                    {/* ✅ NEW: Login warning banner shown when user is not logged in */}
+                    {!token && (
+                        <div className="bt-login-warning">
+                            🔒 You must be <strong>signed in</strong> to book a table. Please login first.
+                        </div>
+                    )}
 
                     {/* Step 1: City */}
                     <p className="bt-section">Step 1 — Select City</p>
@@ -146,7 +185,7 @@ const BookTable = () => {
                         </div>
                     )}
 
-                    {/* ✅ Restaurant Menu Preview */}
+                    {/* Restaurant Menu Preview */}
                     {selectedRestaurant && (
                         <div className="bt-menu-section">
                             <p className="bt-section">Menu at {selectedRestaurant.name}</p>
@@ -159,7 +198,10 @@ const BookTable = () => {
                                     {restaurantMenus.map(item => (
                                         <div key={item._id} className="bt-menu-card">
                                             {item.image && (
-                                                <img src={item.image.startsWith("http") ? item.image : url + "/images/" + item.image} alt={item.name} />
+                                                <img
+                                                    src={item.image.startsWith("http") ? item.image : url + "/images/" + item.image}
+                                                    alt={item.name}
+                                                />
                                             )}
                                             <div className="bt-menu-info">
                                                 <span className="bt-menu-cat">{item.category}</span>
@@ -173,7 +215,7 @@ const BookTable = () => {
                         </div>
                     )}
 
-                    {/* Step 3: Details */}
+                    {/* Step 3: Personal Details */}
                     <p className="bt-section">Step 3 — Your Details</p>
                     <div className="bt-row">
                         <div className="bt-field">
@@ -198,14 +240,36 @@ const BookTable = () => {
 
                     {/* Step 4: Date & Time */}
                     <p className="bt-section">Step 4 — Date &amp; Time</p>
+
+                    {/* ✅ NEW: Timing info banner */}
+                    <div className="bt-time-info">
+                        ⏰ Bookings are only available between <strong>10:00 AM</strong> and <strong>11:00 PM</strong>
+                    </div>
+
                     <div className="bt-row">
                         <div className="bt-field">
                             <label>Date *</label>
-                            <input type="date" name="date" value={formData.date} onChange={handleChange} min={today} required />
+                            <input
+                                type="date"
+                                name="date"
+                                value={formData.date}
+                                onChange={handleChange}
+                                min={today}
+                                required
+                            />
                         </div>
                         <div className="bt-field">
-                            <label>Time *</label>
-                            <input type="time" name="time" value={formData.time} onChange={handleChange} required />
+                            {/* ✅ Time input restricted to 10:00 AM – 11:00 PM */}
+                            <label>Time * <span className="bt-opt">(10:00 AM – 11:00 PM)</span></label>
+                            <input
+                                type="time"
+                                name="time"
+                                value={formData.time}
+                                onChange={handleChange}
+                                min={MIN_TIME}
+                                max={MAX_TIME}
+                                required
+                            />
                         </div>
                     </div>
 

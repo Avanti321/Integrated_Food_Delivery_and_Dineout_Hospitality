@@ -1,10 +1,11 @@
 import 'dotenv/config'
 import express from "express"
 import cors from "cors"
-import mongoose from 'mongoose'
-import dotenv from "dotenv"
 import http from "http"
 import { Server } from "socket.io"
+import dotenv from "dotenv"
+import path from 'path'
+import { fileURLToPath } from 'url'
 
 import { connectDB } from "./config/db.js"
 import foodRouter from "./routes/foodRoute.js"
@@ -12,15 +13,14 @@ import userRouter from "./routes/userRoute.js"
 import cartRouter from "./routes/cartRoutes.js"
 import orderRouter from "./routes/orderRoutes.js"
 import bookingRoutes from "./routes/bookingRoutes.js"
-import paymentRoutes from "./routes/paymentRoutes.js"
 import adminRoutes from "./routes/adminRoutes.js"
 import categoryRoutes from "./routes/categoryRoutes.js"
-import menuRouter from "./routes/menuRoutes.js"             // ✅ NEW
-import deliveryBoyRouter from "./routes/deliveryBoyRoutes.js" // ✅ NEW
+import menuRouter from "./routes/menuRoutes.js"
+import deliveryBoyRouter from "./routes/deliveryBoyRoutes.js"
 import orderSocket from './sockets/orderSocket.js'
 
-import path from 'path'
-import { fileURLToPath } from 'url'
+// ✅ REMOVED: import paymentRoutes from "./routes/paymentRoutes.js"
+// ✅ REMOVED: Razorpay is fully replaced by Stripe (used in orderController.js)
 
 dotenv.config()
 
@@ -37,17 +37,17 @@ app.use(cors())
 // Static uploads folder
 app.use("/images", express.static(path.join(__dirname, 'uploads')))
 
-// ── Routes ────────────────────────────────────────────────────────────────────
-app.use("/api/food",         foodRouter)
-app.use("/api/user",         userRouter)
-app.use("/api/cart",         cartRouter)
-app.use("/api/order",        orderRouter)
-app.use("/api/bookings",     bookingRoutes)
-app.use("/api/payment",      paymentRoutes)
-app.use("/api/admin",        adminRoutes)
-app.use("/api/category",     categoryRoutes)
-app.use("/api/menu",         menuRouter)          // ✅ NEW — menus collection
-app.use("/api/deliveryboy",  deliveryBoyRouter)   // ✅ NEW — delivery boys collection
+// ── Routes ─────────────────────────────────────────────────────────────────────
+app.use("/api/food",        foodRouter)
+app.use("/api/user",        userRouter)
+app.use("/api/cart",        cartRouter)
+app.use("/api/order",       orderRouter)
+app.use("/api/bookings",    bookingRoutes)
+app.use("/api/admin",       adminRoutes)       // ✅ Now protected with JWT + adminOnly
+app.use("/api/category",    categoryRoutes)
+app.use("/api/menu",        menuRouter)
+app.use("/api/deliveryboy", deliveryBoyRouter)
+// ✅ REMOVED: app.use("/api/payment", paymentRoutes)  — Stripe handles payment via /api/order/place
 
 connectDB()
 

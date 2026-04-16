@@ -91,6 +91,20 @@
     border-radius: 4px;
 }
 
+/* ✅ NEW — hint shown below checkout button when user is not logged in */
+.cart-login-hint {
+    font-size: 13px;
+    color: #e74c3c;
+    margin-top: -8px;
+    text-align: center;
+}
+
+.cart-login-hint span {
+    font-weight: 700;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 @media (max-width:750px) {
     .cart-bottom{
         flex-direction: column-reverse;

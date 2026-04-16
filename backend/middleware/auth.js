@@ -1,5 +1,8 @@
 import jwt from "jsonwebtoken";
 
+// ─── protect ─────────────────────────────────────────────────────────────────
+// Verifies the JWT and attaches { id, isAdmin } to req.user
+// Use this on any route that requires a logged-in user
 export const protect = (req, res, next) => {
     try {
         const authHeader = req.headers.authorization;
@@ -12,10 +15,10 @@ export const protect = (req, res, next) => {
         }
 
         const token = authHeader.split(" ")[1];
-
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        req.user = { id: decoded.id };
+        // ✅ Now reads both id AND isAdmin from the token
+        req.user = { id: decoded.id, isAdmin: decoded.isAdmin };
 
         next();
 
@@ -28,12 +31,15 @@ export const protect = (req, res, next) => {
     }
 };
 
+// ─── adminOnly ────────────────────────────────────────────────────────────────
+// Always use AFTER protect — blocks non-admin users with a 403
+// Usage: router.get("/stats", protect, adminOnly, handler)
 export const adminOnly = (req, res, next) => {
     if (req.user && req.user.isAdmin) {
         return next();
     }
     return res.status(403).json({
         success: false,
-        message: "Admin access only"
+        message: "Admin access only. You do not have permission."
     });
 };

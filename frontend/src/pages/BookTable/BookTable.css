@@ -15,6 +15,30 @@
 .bt-selected strong { font-size: 14px; font-weight: 700; color: #15803d; }
 .bt-selected p { font-size: 12px; color: #6b7280; margin: 2px 0 0; }
 
+/* ✅ NEW — shown when user is not logged in */
+.bt-login-warning {
+    background: #fef2f2;
+    border: 1.5px solid #fca5a5;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: #b91c1c;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ✅ NEW — timing info banner shown above time input */
+.bt-time-info {
+    background: #fffbeb;
+    border: 1.5px solid #fcd34d;
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 13px;
+    color: #92400e;
+    margin-bottom: -4px;
+}
+
 /* Menu preview */
 .bt-menu-section { background: #f9fafb; border: 1px solid #f3f4f6; border-radius: 12px; padding: 16px; }
 .bt-menu-loading, .bt-menu-empty { font-size: 13px; color: #9ca3af; text-align: center; padding: 12px 0; }

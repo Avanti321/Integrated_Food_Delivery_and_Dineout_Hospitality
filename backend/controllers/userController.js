@@ -3,9 +3,10 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import validator from "validator";
 
-// 🔐 Generate Token
-const createToken = (id) => {
-    return jwt.sign({ id: id }, process.env.JWT_SECRET); // ✅ fixed: id instead of user._id
+// ─── Generate Token ───────────────────────────────────────────────────────────
+// ✅ Now includes isAdmin so admin routes can verify role from token
+const createToken = (id, isAdmin) => {
+    return jwt.sign({ id, isAdmin }, process.env.JWT_SECRET);
 };
 
 // ================= LOGIN =================
@@ -22,8 +23,11 @@ const loginUser = async (req, res) => {
             return res.json({ success: false, message: "Invalid credentials" });
         }
 
-        const token = createToken(user._id); // ✅ passes _id to createToken
-        res.json({ success: true, token });
+        // ✅ Pass isAdmin into the token
+        const token = createToken(user._id, user.isAdmin);
+
+        // ✅ Also return isAdmin to frontend so it can redirect to admin panel
+        res.json({ success: true, token, isAdmin: user.isAdmin });
 
     } catch (error) {
         console.log(error);
@@ -52,15 +56,16 @@ const registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt);
 
         const newUser = new userModel({
-            name: name,
-            email: email,
+            name,
+            email,
             password: hashedPassword
+            // isAdmin defaults to false for all new registrations
         });
 
         const user = await newUser.save();
 
-        const token = createToken(user._id); // ✅ passes _id to createToken
-        res.json({ success: true, token });
+        const token = createToken(user._id, user.isAdmin);
+        res.json({ success: true, token, isAdmin: user.isAdmin });
 
     } catch (error) {
         console.log(error);

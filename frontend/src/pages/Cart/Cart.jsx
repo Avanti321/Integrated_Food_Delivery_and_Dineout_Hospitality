@@ -2,12 +2,25 @@ import React, { useContext } from 'react'
 import './Cart.css'
 import { StoreContext } from '../../context/StoreContext'
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast'; // ✅ for error messages
 
 const Cart = () => {
 
-    const { cartItems, food_list, removeFromCart, getTotalCartAmount, url } = useContext(StoreContext);
+    const { cartItems, food_list, removeFromCart, getTotalCartAmount, url, token } = useContext(StoreContext);
 
     const navigate = useNavigate();
+
+    // ✅ NEW: Check login before going to checkout
+    const handleCheckout = () => {
+        if (!token) {
+            toast.error('Please login first to place an order!', {
+                duration: 3000,
+                icon: '🔒',
+            });
+            return; // Stop here — don't navigate
+        }
+        navigate('/order');
+    };
 
     return (
         <div className='cart'>
@@ -27,9 +40,7 @@ const Cart = () => {
                 <hr />
 
                 {food_list.map((item) => {
-
                     const quantity = cartItems[item._id] || 0;
-
                     if (quantity > 0) {
                         return (
                             <div key={item._id}>
@@ -39,18 +50,12 @@ const Cart = () => {
                                     <p>₹{item.price}</p>
                                     <p>{quantity}</p>
                                     <p>₹{item.price * quantity}</p>
-                                    <p
-                                        onClick={() => removeFromCart(item._id)}
-                                        className='cross'
-                                    >
-                                        ❌
-                                    </p>
+                                    <p onClick={() => removeFromCart(item._id)} className='cross'>❌</p>
                                 </div>
                                 <hr />
                             </div>
                         )
                     }
-
                     return null;
                 })}
 
@@ -68,7 +73,7 @@ const Cart = () => {
                         <hr />
                         <div className='cart-total-details'>
                             <p>Delivery Charges</p>
-                            <p>₹{getTotalCartAmount() === 0 ? 0 : 2}</p> {/* ✅ Fixed: $ → ₹ */}
+                            <p>₹{getTotalCartAmount() === 0 ? 0 : 2}</p>
                         </div>
                         <hr />
                         <div className='cart-total-details'>
@@ -76,13 +81,21 @@ const Cart = () => {
                             <p>₹{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 2}</p>
                         </div>
                     </div>
-                    <button onClick={() => navigate('/order')}>PROCEED TO CHECKOUT</button>
+
+                    {/* ✅ CHANGED: was navigate('/order') directly — now checks login first */}
+                    <button onClick={handleCheckout}>PROCEED TO CHECKOUT</button>
+
+                    {/* ✅ NEW: Small hint shown when user is not logged in */}
+                    {!token && (
+                        <p className='cart-login-hint'>
+                            🔒 You need to <span>sign in</span> before placing an order
+                        </p>
+                    )}
                 </div>
 
                 {/* Promo Code */}
                 <div className="cart-promocode">
                     <p>If you have a promo code, enter it here</p>
-
                     <div className="cart-promocode-input">
                         <input type='text' placeholder='Promo code' />
                         <button>Submit</button>
